@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>x.js</title>
+		<style>
+			html, body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			.swiper {
+				width: 100%;
+				height: 100%;
+			}
+			.swiper-slide img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain; /* или 'cover' для заполнения */
+			}
+		</style>
+
+		<link rel="stylesheet" href="dist/swiper/swiper-bundle.min.css">
+		<script src="dist/swiper/swiper-bundle.min.js"></script>
+	</head>
+	<body>
+		<div class="swiper">
+			<div class="swiper-wrapper">
+			</div>
+		</div>
+
+		<script>
+			function addSlides() {
+				// Получаем контейнер для слайдов
+				const slidesContainer = document.querySelector('.swiper-wrapper');
+
+				// Цикл для создания слайдов
+				for (let i = 1; i <= 659; i++) {
+					// Создаем новый элемент <section>
+					const section = document.createElement('div');
+					section.className = 'swiper-slide';
+
+					const zoomContainer = document.createElement('div');
+					zoomContainer.className = 'swiper-zoom-container';
+
+					// Создаем элемент <img>
+					const img = document.createElement('img');
+
+					const formattedNum = String(i).padStart(3, '0');
+					// Устанавливаем атрибут data-src
+					img.setAttribute('src', `data/${formattedNum}.webp`);
+
+					zoomContainer.appendChild(img);
+					section.appendChild(zoomContainer);
+					// Добавляем секцию в контейнер слайдов
+					slidesContainer.appendChild(section);
+				}
+			}
+
+			// Вызываем функцию добавления слайдов после инициализации
+			addSlides();
+
+			new Swiper('.swiper', {
+				direction: 'vertical', // Главное - вертикальная прокрутка
+				mousewheel: true,      // Прокрутка колесиком мыши
+				keyboard: true,        // Управление стрелками
+				slidesPerView: 1,      // Один слайд на экран
+				spaceBetween: 0,       // Без отступов между слайдами
+				pagination: {
+					el: '.swiper-pagination',
+					clickable: true,
+				},
+				scrollbar: {
+					el: '.swiper-scrollbar',
+					draggable: true,
+				},
+				// Disable preloading of all images
+				preloadImages: false,
+				// Enable lazy loading
+				lazy: {
+					loadPrevNext: true,
+				},
+				zoom: true,
+				on: {
+					"slideChange": function () {
+						const currentSlide = this.activeIndex + 1;
+						history.replaceState(null, '', `#slide-${currentSlide}`);
+					},
+				},
+			})
+		</script>
+	</body>
+</html>
